@@ -6,7 +6,6 @@
 package com.mac.budgetentities.pojos;
 
 import com.mac.budgetentities.IdGenerator;
-import com.mac.budgetentities.Normalizable;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -179,15 +178,18 @@ public class Payment implements Serializable, IdGenerator {
 
     @Override
     public void generateId() {
-        if (Objects.nonNull(paymentBillId) && Objects.nonNull(paymentUserId)) {
-            try {
-                normalize(this, getClass().getDeclaredFields());
-                Field idField = getClass().getDeclaredField("paymentId");
-                generateId(idField, paymentBillId.getBillId(), 
-                        paymentUserId.getUserId());
-            } catch (IllegalArgumentException | IllegalAccessException 
-                    | NoSuchFieldException | SecurityException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        if (Objects.isNull(paymentId) || paymentId.isEmpty()) {
+            if (Objects.nonNull(paymentBillId) && Objects.nonNull(paymentUserId)) {
+                try {
+                    normalize(this, getClass().getDeclaredFields());
+                    Field idField = getClass().getDeclaredField("paymentId");
+                    generateId(idField, paymentBillId.getBillId(),
+                            paymentUserId.getUserId(), String.valueOf(paymentDueDate.getTime()),
+                            String.valueOf(paymentFilingDate.getTime()));
+                } catch (IllegalArgumentException | IllegalAccessException 
+                        | NoSuchFieldException | SecurityException ex) {
+                    Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
