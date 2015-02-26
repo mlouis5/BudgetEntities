@@ -17,6 +17,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -100,7 +101,7 @@ public class Bill implements Serializable, IdGenerator, Addressable {
     @JoinColumn(name = "bill_owner", referencedColumnName = "user_id", nullable = false)
     @ManyToOne(optional = false)
     private User billOwner;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paymentBillId")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "paymentBillId")
     private List<Payment> paymentList;
 
     public Bill() {
